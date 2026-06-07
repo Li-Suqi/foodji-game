@@ -1,0 +1,187 @@
+/* ── Score card (centered absolutely in the 900×650 canvas) ── */
+.score-card {
+  position: relative;
+  z-index: 1;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px 44px 36px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  width: 500px;
+  max-height: 620px;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.score-card h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.score-recipe-name {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 22px;
+}
+
+/* ── Total score ── */
+.score-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 28px;
+}
+
+#score-number {
+  font-size: 80px;
+  font-weight: 900;
+  color: var(--green);
+  line-height: 1;
+  letter-spacing: -3px;
+}
+
+.score-max {
+  font-size: 24px;
+  color: var(--gray);
+  font-weight: 600;
+}
+
+/* ── Score breakdown bars ── */
+.score-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 26px;
+  text-align: left;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-label {
+  font-size: 12px;
+  color: var(--text-soft);
+  font-weight: 500;
+  width: 148px;
+  flex-shrink: 0;
+}
+
+.score-bar-container {
+  flex: 1;
+  height: 9px;
+  background: var(--gray-mid);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.score-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green) 0%, #22c55e 100%);
+  border-radius: 5px;
+  width: 0;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.score-row span:last-child {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  width: 42px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Divider ── */
+.score-divider {
+  height: 1px;
+  background: var(--gray-mid);
+  margin: 20px 0 18px;
+}
+
+/* ── Ingredient reveal ── */
+#ingredient-reveal {
+  text-align: left;
+  margin-bottom: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reveal-section h4 {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.reveal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reveal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 68px;
+  position: relative;
+  border-radius: 10px;
+  padding: 7px 4px 6px;
+}
+
+.reveal-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.reveal-item span {
+  font-size: 9px;
+  color: var(--text-soft);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.reveal-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+.reveal-correct {
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+}
+.reveal-correct .reveal-badge { background: var(--green); }
+
+.reveal-missing {
+  background: #fef9c3;
+  border: 2px solid #fde047;
+  opacity: 0.85;
+}
+.reveal-missing .reveal-badge { background: #ca8a04; }
+
+.reveal-wrong {
+  background: #fef2f2;
+  border: 2px solid #fca5a5;
+}
+.reveal-wrong .reveal-badge { background: var(--red); }

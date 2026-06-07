@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodji Kitchen Challenge</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/layout/logo.svg">
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/kitchen.css">
+  <link rel="stylesheet" href="src/css/score.css">
+</head>
+<body>
+  <div id="game-container">
+
+    <!-- ═══════════════════════════════════════════
+         Shared kitchen background SVG (900×650)
+         Always behind all screens
+    ═══════════════════════════════════════════ -->
+    <svg class="kitchen-bg" viewBox="0 0 900 650" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <pattern id="wall-tile" width="80" height="80" patternUnits="userSpaceOnUse">
+          <rect width="80" height="80" fill="#fef3e2"/>
+          <rect x="2" y="2" width="76" height="76" fill="#fef1dc" stroke="#e2cbaa" stroke-width="1.5" rx="1"/>
+        </pattern>
+        <linearGradient id="counter-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#b07838"/>
+          <stop offset="100%" stop-color="#8a5820"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Wall -->
+      <rect width="900" height="294" fill="url(#wall-tile)"/>
+
+      <!-- Upper cabinets (right side of wall) -->
+      <rect x="488" y="0" width="412" height="222" fill="#c49054"/>
+      <!-- Left cabinet door -->
+      <rect x="492" y="3" width="198" height="215" rx="2" fill="#d4a464"/>
+      <!-- Right cabinet door -->
+      <rect x="694" y="3" width="202" height="215" rx="2" fill="#d4a464"/>
+      <!-- Inner panels -->
+      <rect x="504" y="15" width="174" height="191" rx="2" fill="none" stroke="#b08040" stroke-width="1.5"/>
+      <rect x="706" y="15" width="178" height="191" rx="2" fill="none" stroke="#b08040" stroke-width="1.5"/>
+      <!-- Handles -->
+      <rect x="570" y="108" width="34" height="9" rx="4.5" fill="#8a5828"/>
+      <rect x="774" y="108" width="34" height="9" rx="4.5" fill="#8a5828"/>
+      <!-- Hinge dots -->
+      <circle cx="494" cy="30"  r="3" fill="#9a7030"/>
+      <circle cx="494" cy="194" r="3" fill="#9a7030"/>
+      <circle cx="692" cy="30"  r="3" fill="#9a7030"/>
+      <circle cx="692" cy="194" r="3" fill="#9a7030"/>
+      <circle cx="696" cy="30"  r="3" fill="#9a7030"/>
+      <circle cx="696" cy="194" r="3" fill="#9a7030"/>
+      <!-- Cabinet bottom shadow -->
+      <rect x="488" y="220" width="412" height="5" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Counter back edge -->
+      <rect y="290" width="900" height="8"  fill="#5a3208"/>
+      <!-- Counter lip -->
+      <rect y="298" width="900" height="30" fill="#6e3e12"/>
+      <!-- Lip highlight -->
+      <rect y="298" width="900" height="7"  fill="#8a5220"/>
+      <!-- Counter surface -->
+      <rect y="328" width="900" height="322" fill="url(#counter-grad)"/>
+      <!-- Surface top gloss -->
+      <rect y="328" width="900" height="5" fill="#c08848" opacity="0.6"/>
+      <!-- Wood grain lines -->
+      <line x1="0" y1="372" x2="900" y2="372" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
+      <line x1="0" y1="418" x2="900" y2="418" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
+      <line x1="0" y1="464" x2="900" y2="464" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
+      <line x1="0" y1="510" x2="900" y2="510" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
+      <line x1="0" y1="556" x2="900" y2="556" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
+      <line x1="0" y1="602" x2="900" y2="602" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
+
+      <!-- Cutting board (left of bowl) -->
+      <rect x="148" y="344" width="144" height="104" rx="10" fill="#a86830"/>
+      <rect x="154" y="350" width="132" height="92"  rx="8"  fill="#c08040"/>
+      <rect x="264" y="378" width="52"  height="18"  rx="9"  fill="#a86830"/>
+
+      <!-- Bowl shadow on counter -->
+      <ellipse cx="437" cy="534" rx="106" ry="13" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Small herb plant (right of bowl) -->
+      <ellipse cx="650" cy="362" rx="18" ry="8"  fill="#7a4010"/>
+      <ellipse cx="650" cy="353" rx="16" ry="7"  fill="#9a6020"/>
+      <circle  cx="650" cy="342" r="14"           fill="#2a7020"/>
+      <circle  cx="641" cy="334" r="7"            fill="#389930"/>
+      <circle  cx="659" cy="334" r="7"            fill="#389930"/>
+      <circle  cx="650" cy="331" r="5"            fill="#48b840"/>
+
+      <!-- Pantry shelf divider -->
+      <rect y="540" width="900" height="2" fill="rgba(80,38,0,0.32)"/>
+    </svg>
+
+    <!-- ═══════════════════════════════════════════
+         START SCREEN
+    ═══════════════════════════════════════════ -->
+    <div id="screen-start" class="screen active">
+      <div class="screen-dim"></div>
+      <div class="start-card">
+        <img src="assets/images/layout/logo.svg" alt="Foodji" class="start-logo">
+        <h1 data-i18n="startTitle">Kitchen Challenge</h1>
+        <p data-i18n-html="startDesc">Ein Kunde bestellt ein Gericht. Leg die richtigen Zutaten in die Schüssel — ganz ohne Hinweise! Du hast <strong>60 Sekunden</strong>.</p>
+        <button id="btn-start" class="btn-primary" data-i18n="startBtn">Jetzt kochen!</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         GAME SCREEN  (900×650, all elements absolute)
+    ═══════════════════════════════════════════ -->
+    <div id="screen-game" class="screen">
+
+      <!-- Logo -->
+      <img src="assets/images/layout/logo.svg" alt="Foodji" class="game-logo">
+
+      <!-- Dish name (top-center) -->
+      <div id="dish-name" class="game-dish-name"></div>
+
+      <!-- Mute button -->
+      <button id="btn-mute" class="btn-mute" title="Ton ein/ausschalten">🔊</button>
+
+      <!-- Timer -->
+      <div class="timer-container">
+        <img src="assets/images/layout/clock.png" alt="Timer" class="clock-img">
+        <div id="timer-count">60</div>
+      </div>
+
+      <!-- Customer character -->
+      <img id="customer-img" src="" alt="Kunde" class="customer-img">
+
+      <!-- Order speech bubble -->
+      <div class="order-bubble">
+        <span class="order-label" data-i18n="orderLabel">Ich hätte gerne:</span>
+        <p id="order-text"></p>
+      </div>
+
+      <!-- Bowl (drop zone on counter) -->
+      <div class="bowl-drop-zone" id="bowl-drop-zone">
+        <div class="bowl-hint" id="bowl-hint">
+          <span class="bowl-hint-icon">🥗</span>
+          <span data-i18n="bowlHint">Zutaten ablegen</span>
+          <span class="bowl-hint-sub" data-i18n="bowlHintSub">ziehen oder klicken</span>
+        </div>
+        <div class="bowl-ingredients" id="bowl-ingredients"></div>
+      </div>
+
+      <!-- Submit button -->
+      <button id="btn-submit" class="btn-submit" data-i18n="submitBtn">Gericht fertig! ✓</button>
+
+      <!-- Ingredient pantry (bottom strip) -->
+      <div class="pantry">
+        <span class="pantry-label" data-i18n="pantryLabel">Kühlschrank</span>
+        <div class="ingredients-grid" id="ingredients-grid"></div>
+      </div>
+
+    </div><!-- /screen-game -->
+
+    <!-- ═══════════════════════════════════════════
+         SCORE SCREEN
+    ═══════════════════════════════════════════ -->
+    <div id="screen-score" class="screen">
+      <div class="screen-dim"></div>
+      <div class="score-card">
+        <h2 data-i18n="scoreTitle">Ergebnis</h2>
+        <div class="score-recipe-name" id="score-recipe-name"></div>
+
+        <div class="score-total">
+          <span id="score-number">0</span>
+          <span class="score-max">/ 100</span>
+        </div>
+
+        <div class="score-breakdown">
+          <div class="score-row">
+            <span class="score-label" data-i18n="accuracy">Zutaten-Korrektheit</span>
+            <div class="score-bar-container">
+              <div id="score-bar-accuracy" class="score-bar"></div>
+            </div>
+            <span id="score-accuracy">0/50</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label" data-i18n="completeness">Vollständigkeit</span>
+            <div class="score-bar-container">
+              <div id="score-bar-completeness" class="score-bar"></div>
+            </div>
+            <span id="score-completeness">0/30</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label" data-i18n="speedBonus">Speed Bonus</span>
+            <div class="score-bar-container">
+              <div id="score-bar-speed" class="score-bar"></div>
+            </div>
+            <span id="score-speed">0/20</span>
+          </div>
+        </div>
+
+        <div class="score-divider"></div>
+        <div id="ingredient-reveal"></div>
+
+        <button id="btn-play-again" class="btn-primary" data-i18n="playAgain">Nochmal spielen</button>
+      </div>
+    </div><!-- /screen-score -->
+
+    <!-- Language toggle (always on top) -->
+    <div class="lang-toggle" id="lang-toggle">
+      <button class="lang-btn" data-lang="de">DE</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+
+  </div><!-- /game-container -->
+
+  <script src="src/js/i18n.js"></script>
+  <script src="src/js/audio.js"></script>
+  <script src="src/js/recipes.js"></script>
+  <script src="src/js/timer.js"></script>
+  <script src="src/js/dragdrop.js"></script>
+  <script src="src/js/scoring.js"></script>
+  <script src="src/js/main.js"></script>
+</body>
+</html>

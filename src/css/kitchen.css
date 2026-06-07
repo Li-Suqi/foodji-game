@@ -1,0 +1,423 @@
+/*
+  Game screen: all elements absolutely positioned on the 900×650 canvas.
+
+  Zones (matching the background SVG):
+    Wall:          y  0 – 294
+    Counter lip:   y 294 – 328
+    Counter:       y 328 – 650
+    Pantry strip:  y 542 – 650
+*/
+
+/* ── Logo (top-left, on wall) ── */
+.game-logo {
+  position: absolute;
+  left: 18px;
+  top: 14px;
+  height: 28px;
+  object-fit: contain;
+}
+
+/* ── Dish name (top-center, on wall) ── */
+.game-dish-name {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  font-size: 17px;
+  font-weight: 800;
+  color: #3a2008;
+  white-space: nowrap;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  letter-spacing: -0.2px;
+}
+
+/* ── Mute button (top-right, wall) ── */
+.btn-mute {
+  position: absolute;
+  right: 96px;
+  top: 22px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  line-height: 1;
+  z-index: 10;
+}
+
+.btn-mute:hover {
+  background: rgba(255, 255, 255, 0.96);
+  transform: scale(1.08);
+}
+
+.btn-mute.muted {
+  opacity: 0.55;
+}
+
+/* ── Timer (top-right corner, on wall) ── */
+.timer-container {
+  position: absolute;
+  right: 16px;
+  top: 6px;
+  width: 74px;
+  height: 74px;
+  z-index: 10;
+}
+
+.clock-img {
+  width: 74px;
+  height: 74px;
+  object-fit: contain;
+  display: block;
+}
+
+#timer-count {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6px; /* optical centre of clock face */
+  font-size: 25px;
+  font-weight: 900;
+  color: var(--white);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+#timer-count.urgent {
+  color: #fca5a5;
+  animation: pulse-timer 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-timer {
+  from { transform: scale(1); }
+  to   { transform: scale(1.18); }
+}
+
+/* ── Customer character (left side, wall area) ── */
+.customer-img {
+  position: absolute;
+  left: 22px;
+  top: 52px;
+  width: 118px;
+  height: 228px;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.18));
+}
+
+/* ── Order speech bubble (right of customer) ── */
+.order-bubble {
+  position: absolute;
+  left: 152px;
+  top: 68px;
+  width: 242px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 12px 15px 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* speech bubble pointer → left */
+.order-bubble::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 22px;
+  border: 6px solid transparent;
+  border-right-color: var(--white);
+}
+
+.order-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+#order-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+/* ── Bowl drop zone (center of counter) ── */
+.bowl-drop-zone {
+  position: absolute;
+  left: 330px;
+  top: 322px;
+  width: 214px;
+  height: 214px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #fffef9 0%, #f2e8d6 50%, #e2d0b8 100%);
+  border: 5px solid #c8a870;
+  box-shadow:
+    inset 0 10px 30px rgba(0, 0, 0, 0.20),
+    inset 0 -4px 10px rgba(255, 255, 255, 0.25),
+    0 6px 20px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  z-index: 5;
+}
+
+.bowl-drop-zone.drag-over {
+  border-color: var(--green);
+  box-shadow:
+    inset 0 10px 30px rgba(0, 0, 0, 0.20),
+    inset 0 -4px 10px rgba(255, 255, 255, 0.25),
+    0 0 0 3px var(--green),
+    0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Bowl hint (shown when empty) */
+.bowl-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #b09870;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  pointer-events: none;
+  padding: 12px;
+}
+
+.bowl-hint-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.bowl-hint-sub {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+/* Bowl ingredients grid */
+.bowl-ingredients {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 14px;
+  justify-content: center;
+  align-content: center;
+}
+
+.bowl-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 68px;
+  animation: pop-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.bowl-item img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+  pointer-events: none;
+}
+
+.bowl-item span {
+  font-size: 8.5px;
+  color: #5a3e20;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: background 0.12s, transform 0.1s;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+  transform: scale(1.15);
+}
+
+/* ── Submit button (right of bowl, on counter) ── */
+.btn-submit {
+  position: absolute;
+  right: 46px;
+  top: 402px;
+  width: 160px;
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 13px;
+  padding: 0;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.40);
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.btn-submit:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.46);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* ── Ingredient pantry (bottom strip, on counter) ── */
+.pantry {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 108px;
+  padding: 4px 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  z-index: 5;
+}
+
+.pantry-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.ingredients-grid {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+  align-items: center;
+}
+
+/* ── Ingredient card ── */
+.ingredient-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 6px 4px 5px;
+  cursor: grab;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s, opacity 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  backdrop-filter: blur(4px);
+}
+
+.ingredient-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.98);
+  border-color: var(--green-mid);
+}
+
+.ingredient-card:active {
+  cursor: grabbing;
+}
+
+.ingredient-card.dragging {
+  opacity: 0.4;
+  transform: scale(0.94);
+}
+
+.ingredient-card.in-bowl {
+  opacity: 0.45;
+  background: rgba(187, 247, 208, 0.7);
+  border-color: var(--green-mid);
+  cursor: pointer;
+}
+
+.ingredient-card img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.ingredient-card span {
+  font-size: 9px;
+  color: #374151;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 600;
+  pointer-events: none;
+  width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.in-bowl-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
