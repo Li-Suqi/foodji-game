@@ -34,6 +34,16 @@ const AudioManager = (() => {
     bgm.currentTime = 0;
   }
 
+  function pauseBGM() {
+    if (!bgm) return;
+    bgm.pause();
+  }
+
+  function resumeBGM() {
+    if (!bgm || muted) return;
+    bgm.play().catch(() => {});
+  }
+
   function playSFX(name) {
     if (muted) return;
     const a = sfx[name];
@@ -51,5 +61,5 @@ const AudioManager = (() => {
     return muted;
   }
 
-  return { init, startBGM, stopBGM, playSFX, toggleMute };
+  return { init, startBGM, stopBGM, pauseBGM, resumeBGM, playSFX, toggleMute };
 })();

@@ -22,11 +22,20 @@ class GameTimer {
     }
   }
 
-  stop() {
+  pause() {
     if (this._intervalId !== null) {
       clearInterval(this._intervalId);
       this._intervalId = null;
     }
+  }
+
+  resume() {
+    if (this._intervalId !== null) return;
+    this._intervalId = setInterval(() => this._tick(), 1000);
+  }
+
+  stop() {
+    this.pause();
   }
 
   getRemaining() {

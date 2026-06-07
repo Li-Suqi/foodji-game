@@ -115,8 +115,19 @@
       <!-- Dish name (top-center) -->
       <div id="dish-name" class="game-dish-name"></div>
 
+      <!-- Pause button -->
+      <button id="btn-pause" class="btn-pause" title="Pause (Esc)">⏸</button>
+
       <!-- Mute button -->
       <button id="btn-mute" class="btn-mute" title="Ton ein/ausschalten">🔊</button>
+
+      <!-- Pause overlay -->
+      <div id="pause-overlay" class="pause-overlay" style="display:none">
+        <div class="pause-card">
+          <p class="pause-title" data-i18n="pausedTitle">Pausiert</p>
+          <button id="btn-resume" class="btn-primary" data-i18n="resumeBtn">▶ Weiter</button>
+        </div>
+      </div>
 
       <!-- Timer -->
       <div class="timer-container">

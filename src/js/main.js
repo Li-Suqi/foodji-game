@@ -1,5 +1,6 @@
 const Game = (() => {
   let state = 'idle';
+  let paused = false;
   let currentRecipe = null;
   let placedIngredients = new Set();
   let currentPantryIngredients = [];
@@ -13,6 +14,12 @@ const Game = (() => {
     document.getElementById('btn-start').addEventListener('click', startGame);
     document.getElementById('btn-submit').addEventListener('click', () => submitDish('manual'));
     document.getElementById('btn-play-again').addEventListener('click', showStartScreen);
+    document.getElementById('btn-pause').addEventListener('click', togglePause);
+    document.getElementById('btn-resume').addEventListener('click', togglePause);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') togglePause();
+    });
+
     document.getElementById('btn-mute').addEventListener('click', () => {
       const muted = AudioManager.toggleMute();
       const btn = document.getElementById('btn-mute');
@@ -73,6 +80,9 @@ const Game = (() => {
 
   function startGame() {
     state = 'playing';
+    paused = false;
+    document.getElementById('pause-overlay').style.display = 'none';
+    document.getElementById('btn-pause').textContent = '⏸';
     placedIngredients = new Set();
 
     const pool = RECIPES.slice();
@@ -165,7 +175,7 @@ const Game = (() => {
   }
 
   function addIngredient(id) {
-    if (state !== 'playing' || placedIngredients.has(id)) return;
+    if (state !== 'playing' || paused || placedIngredients.has(id)) return;
     placedIngredients.add(id);
     renderBowl();
     AudioManager.playSFX('drop');
@@ -283,6 +293,24 @@ const Game = (() => {
       }
       wrongSection.appendChild(wrongGrid);
       container.appendChild(wrongSection);
+    }
+  }
+
+  function togglePause() {
+    if (state !== 'playing') return;
+    paused = !paused;
+    const overlay = document.getElementById('pause-overlay');
+    const btnPause = document.getElementById('btn-pause');
+    if (paused) {
+      timer.pause();
+      AudioManager.pauseBGM();
+      overlay.style.display = 'flex';
+      btnPause.textContent = '▶';
+    } else {
+      timer.resume();
+      AudioManager.resumeBGM();
+      overlay.style.display = 'none';
+      btnPause.textContent = '⏸';
     }
   }
 

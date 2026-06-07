@@ -16,6 +16,8 @@ const I18N = (() => {
       recipeSection: 'Rezept',
       wrongSection:  'Falsche Zutaten',
       playAgain:     'Nochmal spielen',
+      pausedTitle:   'Pausiert',
+      resumeBtn:     '▶ Weiter',
     },
     en: {
       startTitle:    'Kitchen Challenge',
@@ -33,6 +35,8 @@ const I18N = (() => {
       recipeSection: 'Recipe',
       wrongSection:  'Wrong Ingredients',
       playAgain:     'Play Again',
+      pausedTitle:   'Paused',
+      resumeBtn:     '▶ Resume',
     },
   };
 

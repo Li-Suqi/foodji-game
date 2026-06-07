@@ -34,6 +34,59 @@
   letter-spacing: -0.2px;
 }
 
+/* ── Pause button (top-left, next to logo) ── */
+.btn-pause {
+  position: absolute;
+  left: 150px;
+  top: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.btn-pause:hover {
+  background: rgba(255, 255, 255, 0.96);
+  transform: scale(1.08);
+}
+
+/* ── Pause overlay ── */
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.pause-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 44px 60px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.pause-title {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+}
+
 /* ── Mute button (top-right, wall) ── */
 .btn-mute {
   position: absolute;
