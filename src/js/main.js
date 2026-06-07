@@ -89,8 +89,11 @@ const Game = (() => {
     currentRecipe = pool[Math.floor(Math.random() * pool.length)];
 
     const name = recipeName(currentRecipe);
-    document.getElementById('customer-img').src =
-      'assets/images/customers/' + currentRecipe.customer + '.png';
+    const customerImg = document.getElementById('customer-img');
+    customerImg.classList.remove('entering');
+    void customerImg.offsetWidth; // force reflow to restart animation
+    customerImg.src = 'assets/images/customers/' + currentRecipe.customer + '.png';
+    customerImg.classList.add('entering');
     document.getElementById('order-text').textContent = name;
     document.getElementById('dish-name').textContent = name;
 

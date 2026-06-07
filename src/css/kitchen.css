@@ -168,6 +168,16 @@
   object-fit: contain;
   object-position: bottom;
   filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.18));
+  transform-origin: bottom center;
+}
+
+.customer-img.entering {
+  animation: customer-enter 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes customer-enter {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
 /* ── Order speech bubble (right of customer) ── */
