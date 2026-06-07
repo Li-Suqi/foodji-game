@@ -5,10 +5,10 @@
 }
 
 :root {
-  --green:        #16A34A;
-  --green-dark:   #15803d;
-  --green-light:  #dff4e6;
-  --green-mid:    #bbf7d0;
+  --green:        #FADD50;
+  --green-dark:   #c4a000;
+  --green-light:  #fefce8;
+  --green-mid:    #fef08a;
   --white:        #ffffff;
   --gray:         #6b7280;
   --gray-light:   #f3f4f6;
@@ -114,7 +114,7 @@ body {
 
 .lang-btn.active {
   background: var(--green);
-  color: var(--white);
+  color: #1a1a1a;
 }
 
 /* ── Start screen card ── */
@@ -137,7 +137,7 @@ body {
 .start-card h1 {
   font-size: 28px;
   font-weight: 800;
-  color: var(--green);
+  color: var(--green-dark);
   margin-bottom: 12px;
   letter-spacing: -0.4px;
 }
@@ -152,7 +152,7 @@ body {
 /* ── Shared primary button ── */
 .btn-primary {
   background: var(--green);
-  color: var(--white);
+  color: #1a1a1a;
   border: none;
   border-radius: 12px;
   padding: 13px 34px;

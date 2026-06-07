@@ -38,7 +38,7 @@
 #score-number {
   font-size: 80px;
   font-weight: 900;
-  color: var(--green);
+  color: var(--green-dark);
   line-height: 1;
   letter-spacing: -3px;
 }
@@ -82,7 +82,7 @@
 
 .score-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--green) 0%, #22c55e 100%);
+  background: linear-gradient(90deg, var(--green-dark) 0%, var(--green) 100%);
   border-radius: 5px;
   width: 0;
   transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -91,7 +91,7 @@
 .score-row span:last-child {
   font-size: 12px;
   font-weight: 700;
-  color: var(--green);
+  color: var(--green-dark);
   width: 42px;
   text-align: right;
   flex-shrink: 0;
@@ -171,7 +171,7 @@
   background: #f0fdf4;
   border: 2px solid #86efac;
 }
-.reveal-correct .reveal-badge { background: var(--green); }
+.reveal-correct .reveal-badge { background: var(--green); color: #1a1a1a; }
 
 .reveal-missing {
   background: #fef9c3;

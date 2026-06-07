@@ -18,6 +18,9 @@ const I18N = (() => {
       playAgain:     'Nochmal spielen',
       pausedTitle:   'Pausiert',
       resumeBtn:     '▶ Weiter',
+      drinksLabel:   'Getränke',
+      chooseDrink:   'Getränk wählen',
+      drinkDone:     'Fertig',
     },
     en: {
       startTitle:    'Kitchen Challenge',
@@ -37,6 +40,9 @@ const I18N = (() => {
       playAgain:     'Play Again',
       pausedTitle:   'Paused',
       resumeBtn:     '▶ Resume',
+      drinksLabel:   'Drinks',
+      chooseDrink:   'Choose a Drink',
+      drinkDone:     'Done',
     },
   };
 

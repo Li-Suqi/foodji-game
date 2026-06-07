@@ -100,6 +100,43 @@ const RECIPES = [
   }
 ];
 
+const FOODS = [
+  { file: 'Bombay Masala mit Hähnchenbrustfilet und Reis.png',  name: 'Bombay Masala',        nameEn: 'Bombay Masala' },
+  { file: 'Buntes Linsencurry mit Reis.png',                    name: 'Linsencurry',           nameEn: 'Lentil Curry' },
+  { file: 'Caesar Salat.png',                                   name: 'Caesar Salat',          nameEn: 'Caesar Salad' },
+  { file: 'Fleischbällchen mit Kartoffelpüree und Erbsen.png',  name: 'Fleischbällchen',       nameEn: 'Meatballs' },
+  { file: 'Gemüselasagne mit Tomatensoße.png',                  name: 'Gemüselasagne',         nameEn: 'Veggie Lasagna' },
+  { file: 'Hähnchen mit Brokkoli-Reis und Kokossoße.png',       name: 'Hähnchen Bowl',         nameEn: 'Chicken Bowl' },
+  { file: 'Hähnchen mit Kartoffeln und Brokkoli.png',           name: 'Hähnchen & Kartoffeln', nameEn: 'Chicken & Potatoes' },
+  { file: 'Pilzravioli mit Trüffelbutter.png',                  name: 'Pilzravioli',           nameEn: 'Mushroom Ravioli' },
+  { file: 'Rindergulasch mit Schupfnudeln und Brokkoli.png',    name: 'Rindergulasch',         nameEn: 'Beef Goulash' },
+  { file: 'Salatbowl mit geräuchertem Lachs und Quinoa.png',    name: 'Lachsbowl',             nameEn: 'Salmon Bowl' },
+  { file: 'Salatbowl mit Tomate-Mozzarella.png',                name: 'Salatbowl',             nameEn: 'Salad Bowl' },
+  { file: 'Sesambagel mit Schinken.png',                        name: 'Bagel mit Schinken',    nameEn: 'Bagel with Ham' },
+  { file: 'Sesambagel mit Tomate Mozzarella.png',               name: 'Bagel Caprese',         nameEn: 'Caprese Bagel' },
+  { file: 'Spaghetti mit Basilikumpesto.png',                   name: 'Pesto Spaghetti',       nameEn: 'Pesto Spaghetti' },
+  { file: 'Udon-Nudeln mit geräuchertem Tofu.png',              name: 'Udon Bowl',             nameEn: 'Udon Bowl' },
+];
+
+const DRINKS = [
+  { file: 'Adelholzener Lemon Sport.png',                             name: 'Lemon Sport',         nameEn: 'Lemon Sport' },
+  { file: 'ChariTea Mate.png',                                        name: 'ChariTea Mate',       nameEn: 'ChariTea Mate' },
+  { file: 'Lemonaid Limette.png',                                     name: 'Lemonaid Limette',    nameEn: 'Lemonaid Lime' },
+  { file: 'Lemonaid Maracuja.png',                                    name: 'Lemonaid Maracuja',   nameEn: 'Lemonaid Passion Fruit' },
+  { file: 'Rauch Eiskaffee-style Latte Macchiato Vanilla.png',        name: 'Latte Macchiato',     nameEn: 'Latte Macchiato' },
+  { file: 'Rauch Eistee mit schwarzem Tee und Pfirsich.png',          name: 'Pfirsich Eistee',     nameEn: 'Peach Iced Tea' },
+  { file: 'Rauch Multivitamin-Saft.png',                              name: 'Multivitaminsaft',    nameEn: 'Multivitamin Juice' },
+  { file: 'True fruits Smoothie Beerenmix.png',                       name: 'Beeren-Smoothie',     nameEn: 'Berry Smoothie' },
+  { file: 'Vitamin Well Vitaminwasser Himbeere zuckerfrei.png',       name: 'Vitaminwasser',       nameEn: 'Vitamin Water' },
+];
+
+function getRandomFood()  { return FOODS[Math.floor(Math.random()  * FOODS.length)]; }
+function getRandomDrink() { return DRINKS[Math.floor(Math.random() * DRINKS.length)]; }
+
+function orderItemName(item) {
+  return I18N.getLang() === 'en' ? item.nameEn : item.name;
+}
+
 function getIngredientById(id) {
   return ALL_INGREDIENTS.find(i => i.id === id);
 }

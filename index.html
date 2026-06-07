@@ -71,21 +71,14 @@
       <line x1="0" y1="556" x2="900" y2="556" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
       <line x1="0" y1="602" x2="900" y2="602" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
 
-      <!-- Cutting board (left of bowl) -->
-      <rect x="148" y="344" width="144" height="104" rx="10" fill="#a86830"/>
-      <rect x="154" y="350" width="132" height="92"  rx="8"  fill="#c08040"/>
-      <rect x="264" y="378" width="52"  height="18"  rx="9"  fill="#a86830"/>
+      <!-- Cutting board (right of bowl) -->
+      <rect x="600" y="344" width="144" height="104" rx="10" fill="#a86830"/>
+      <rect x="606" y="350" width="132" height="92"  rx="8"  fill="#c08040"/>
+      <rect x="716" y="378" width="52"  height="18"  rx="9"  fill="#a86830"/>
 
-      <!-- Bowl shadow on counter -->
-      <ellipse cx="437" cy="534" rx="106" ry="13" fill="rgba(0,0,0,0.22)"/>
+      <!-- Bowl shadow on counter (matches oval plate: cx=304+136, cy=340+180) -->
+      <ellipse cx="440" cy="518" rx="132" ry="10" fill="rgba(0,0,0,0.22)"/>
 
-      <!-- Small herb plant (right of bowl) -->
-      <ellipse cx="650" cy="362" rx="18" ry="8"  fill="#7a4010"/>
-      <ellipse cx="650" cy="353" rx="16" ry="7"  fill="#9a6020"/>
-      <circle  cx="650" cy="342" r="14"           fill="#2a7020"/>
-      <circle  cx="641" cy="334" r="7"            fill="#389930"/>
-      <circle  cx="659" cy="334" r="7"            fill="#389930"/>
-      <circle  cx="650" cy="331" r="5"            fill="#48b840"/>
 
       <!-- Pantry shelf divider -->
       <rect y="540" width="900" height="2" fill="rgba(80,38,0,0.32)"/>
@@ -112,16 +105,10 @@
       <!-- Logo -->
       <img src="assets/images/layout/logo.svg" alt="Foodji" class="game-logo">
 
-      <!-- Dish name (top-center) -->
-      <div id="dish-name" class="game-dish-name"></div>
-
-      <!-- Pause button -->
-      <button id="btn-pause" class="btn-pause" title="Pause (Esc)">⏸</button>
-
       <!-- Mute button -->
       <button id="btn-mute" class="btn-mute" title="Ton ein/ausschalten">🔊</button>
 
-      <!-- Pause overlay -->
+      <!-- Pause overlay (shown when paused) -->
       <div id="pause-overlay" class="pause-overlay" style="display:none">
         <div class="pause-card">
           <p class="pause-title" data-i18n="pausedTitle">Pausiert</p>
@@ -129,10 +116,27 @@
         </div>
       </div>
 
-      <!-- Timer -->
-      <div class="timer-container">
-        <img src="assets/images/layout/clock.png" alt="Timer" class="clock-img">
-        <div id="timer-count">60</div>
+      <!-- Timer ring (click to pause) -->
+      <div id="timer-ring" class="timer-ring" title="Pause (Esc)">
+        <svg viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background circle -->
+          <circle cx="38" cy="38" r="31"
+                  fill="rgba(255,255,255,0.92)"
+                  stroke="rgba(0,0,0,0.09)"
+                  stroke-width="6"/>
+          <!-- Progress arc (starts at 12 o'clock) -->
+          <circle id="timer-progress"
+                  cx="38" cy="38" r="31"
+                  fill="none"
+                  stroke="#FADD50"
+                  stroke-width="6"
+                  stroke-linecap="round"
+                  stroke-dasharray="194.78"
+                  stroke-dashoffset="0"
+                  transform="rotate(-90 38 38)"/>
+        </svg>
+        <span id="timer-count">60</span>
+        <span class="timer-pause-icon">⏸</span>
       </div>
 
       <!-- Customer character -->
@@ -141,7 +145,7 @@
       <!-- Order speech bubble -->
       <div class="order-bubble">
         <span class="order-label" data-i18n="orderLabel">Ich hätte gerne:</span>
-        <p id="order-text"></p>
+        <div id="order-items" class="order-items"></div>
       </div>
 
       <!-- Bowl (drop zone on counter) -->
@@ -154,8 +158,28 @@
         <div class="bowl-ingredients" id="bowl-ingredients"></div>
       </div>
 
-      <!-- Submit button -->
+      <!-- Submit button (centered, above pantry) -->
       <button id="btn-submit" class="btn-submit" data-i18n="submitBtn">Gericht fertig! ✓</button>
+
+      <!-- Drink cabinet (left side of counter) -->
+      <div id="drink-cabinet" class="drink-cabinet">
+        <img src="assets/images/layout/drink%20refrigerator.png" alt="Getränke" class="drink-cabinet-img">
+      </div>
+
+      <!-- Selected drink sitting on counter -->
+      <div id="counter-drink" class="counter-drink" style="display:none">
+        <img id="counter-drink-img" src="" alt="">
+        <span id="counter-drink-name" class="counter-drink-name"></span>
+      </div>
+
+      <!-- Drink selection modal -->
+      <div id="drink-modal" class="drink-modal" style="display:none">
+        <div class="drink-modal-card">
+          <h3 data-i18n="chooseDrink">Getränk wählen</h3>
+          <div class="drink-grid" id="drink-grid"></div>
+          <button id="btn-drink-done" class="btn-primary" data-i18n="drinkDone">Fertig</button>
+        </div>
+      </div>
 
       <!-- Ingredient pantry (bottom strip) -->
       <div class="pantry">
