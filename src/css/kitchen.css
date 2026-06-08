@@ -41,6 +41,11 @@
   gap: 12px;
 }
 
+.pause-logo {
+  width: 72px;
+  height: auto;
+}
+
 .pause-title {
   font-size: 30px;
   font-weight: 900;

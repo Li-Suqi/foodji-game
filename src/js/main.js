@@ -25,7 +25,9 @@ const Game = (() => {
     document.getElementById('btn-resume').addEventListener('click', togglePause);
     document.getElementById('btn-restart').addEventListener('click', () => {
       AudioManager.playSFX('click');
-      startGame();
+      const logo = document.querySelector('#pause-overlay .pause-logo');
+      const rect = logo ? logo.getBoundingClientRect() : null;
+      startGame(rect);
     });
     document.getElementById('drink-cabinet').addEventListener('click', () => { AudioManager.playSFX('click'); openDrinkModal(); });
     document.getElementById('btn-drink-done').addEventListener('click', () => { AudioManager.playSFX('click'); closeDrinkModal(); });
@@ -64,10 +66,11 @@ const Game = (() => {
 
     document.getElementById('btn-restart-confirm').addEventListener('click', () => {
       AudioManager.playSFX('click');
+      const logo = document.querySelector('#restart-overlay .pause-logo');
+      const rect = logo ? logo.getBoundingClientRect() : null;
       document.getElementById('restart-overlay').style.display = 'none';
-      document.getElementById('pause-overlay').style.display = 'none';
       paused = false;
-      startGame();
+      startGame(rect);
     });
 
     document.getElementById('btn-restart-cancel').addEventListener('click', () => {
@@ -132,7 +135,7 @@ const Game = (() => {
     document.getElementById('screen-' + name).classList.add('active');
   }
 
-  function startGame() {
+  function startGame(fromRect) {
     state = 'playing';
     paused = false;
     document.getElementById('pause-overlay').style.display = 'none';
@@ -201,14 +204,21 @@ const Game = (() => {
       showScreen('game');
       AudioManager.startBGM();
       timer.start();
-    });
+    }, fromRect);
   }
 
-  function animateLogoTransition(callback) {
-    const container  = document.getElementById('game-container');
-    const startLogo  = document.querySelector('.start-logo');
+  function animateLogoTransition(callback, fromRect) {
+    const container = document.getElementById('game-container');
     const cRect = container.getBoundingClientRect();
-    const lRect = startLogo.getBoundingClientRect();
+
+    let lRect, startLogo;
+    if (fromRect) {
+      lRect = fromRect;
+      startLogo = null;
+    } else {
+      startLogo = document.querySelector('.start-logo');
+      lRect = startLogo.getBoundingClientRect();
+    }
 
     const fromX = lRect.left - cRect.left;
     const fromY = lRect.top  - cRect.top;
@@ -233,7 +243,7 @@ const Game = (() => {
       transformOrigin: 'center center',
     });
     container.appendChild(clone);
-    startLogo.style.opacity = '0'; // hide original while clone flies
+    if (startLogo) startLogo.style.opacity = '0';
 
     // Phase 1 — elastic scale-up (230ms)
     requestAnimationFrame(() => requestAnimationFrame(() => {
