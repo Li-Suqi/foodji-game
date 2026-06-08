@@ -35,8 +35,25 @@ class DragDrop {
       if (card) card.classList.remove('dragging');
     };
 
+    // Drag start from bowl item
+    this._handlers.bowlDragStart = (e) => {
+      const item = e.target.closest('.bowl-item');
+      if (!item) return;
+      e.dataTransfer.setData('text/plain', 'bowl:' + item.dataset.id);
+      e.dataTransfer.effectAllowed = 'move';
+      item.style.opacity = '0.4';
+      if (this.onDragStart) this.onDragStart();
+    };
+
+    this._handlers.bowlDragEnd = (e) => {
+      const item = e.target.closest('.bowl-item');
+      if (item) item.style.opacity = '';
+    };
+
+    // Bowl accepts drops from pantry only
     this._handlers.dragOver = (e) => {
       e.preventDefault();
+      const data = e.dataTransfer.types.includes('text/plain');
       e.dataTransfer.dropEffect = 'copy';
       this.bowlEl.classList.add('drag-over');
     };
@@ -50,24 +67,47 @@ class DragDrop {
     this._handlers.drop = (e) => {
       e.preventDefault();
       this.bowlEl.classList.remove('drag-over');
-      const id = e.dataTransfer.getData('text/plain');
-      if (id) this.onAdd(id);
+      const data = e.dataTransfer.getData('text/plain');
+      if (data && !data.startsWith('bowl:')) this.onAdd(data);
     };
 
-    this.pantryEl.addEventListener('click', this._handlers.pantryClick);
+    // Pantry accepts drops from bowl
+    this._handlers.pantryDragOver = (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    };
+
+    this._handlers.pantryDrop = (e) => {
+      e.preventDefault();
+      const data = e.dataTransfer.getData('text/plain');
+      if (data && data.startsWith('bowl:')) {
+        const id = data.slice(5);
+        if (this.onRemove) this.onRemove(id);
+      }
+    };
+
+    this.pantryEl.addEventListener('click',    this._handlers.pantryClick);
     this.pantryEl.addEventListener('dragstart', this._handlers.dragStart);
-    this.pantryEl.addEventListener('dragend', this._handlers.dragEnd);
-    this.bowlEl.addEventListener('dragover', this._handlers.dragOver);
-    this.bowlEl.addEventListener('dragleave', this._handlers.dragLeave);
-    this.bowlEl.addEventListener('drop', this._handlers.drop);
+    this.pantryEl.addEventListener('dragend',   this._handlers.dragEnd);
+    this.pantryEl.addEventListener('dragover',  this._handlers.pantryDragOver);
+    this.pantryEl.addEventListener('drop',      this._handlers.pantryDrop);
+    this.bowlEl.addEventListener('dragstart',  this._handlers.bowlDragStart);
+    this.bowlEl.addEventListener('dragend',    this._handlers.bowlDragEnd);
+    this.bowlEl.addEventListener('dragover',   this._handlers.dragOver);
+    this.bowlEl.addEventListener('dragleave',  this._handlers.dragLeave);
+    this.bowlEl.addEventListener('drop',       this._handlers.drop);
   }
 
   destroy() {
-    this.pantryEl.removeEventListener('click', this._handlers.pantryClick);
+    this.pantryEl.removeEventListener('click',    this._handlers.pantryClick);
     this.pantryEl.removeEventListener('dragstart', this._handlers.dragStart);
-    this.pantryEl.removeEventListener('dragend', this._handlers.dragEnd);
-    this.bowlEl.removeEventListener('dragover', this._handlers.dragOver);
-    this.bowlEl.removeEventListener('dragleave', this._handlers.dragLeave);
-    this.bowlEl.removeEventListener('drop', this._handlers.drop);
+    this.pantryEl.removeEventListener('dragend',   this._handlers.dragEnd);
+    this.pantryEl.removeEventListener('dragover',  this._handlers.pantryDragOver);
+    this.pantryEl.removeEventListener('drop',      this._handlers.pantryDrop);
+    this.bowlEl.removeEventListener('dragstart',  this._handlers.bowlDragStart);
+    this.bowlEl.removeEventListener('dragend',    this._handlers.bowlDragEnd);
+    this.bowlEl.removeEventListener('dragover',   this._handlers.dragOver);
+    this.bowlEl.removeEventListener('dragleave',  this._handlers.dragLeave);
+    this.bowlEl.removeEventListener('drop',       this._handlers.drop);
   }
 }

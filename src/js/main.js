@@ -15,6 +15,7 @@ const Game = (() => {
     applyTranslations();
 
     document.getElementById('btn-start').addEventListener('click', () => {
+      AudioManager.playSFX('click');
       document.getElementById('btn-start').disabled = true;
       startGame();
     });
@@ -22,8 +23,12 @@ const Game = (() => {
     document.getElementById('btn-play-again').addEventListener('click', showStartScreen);
     document.getElementById('timer-ring').addEventListener('click', togglePause);
     document.getElementById('btn-resume').addEventListener('click', togglePause);
-    document.getElementById('drink-cabinet').addEventListener('click', openDrinkModal);
-    document.getElementById('btn-drink-done').addEventListener('click', closeDrinkModal);
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      AudioManager.playSFX('click');
+      startGame();
+    });
+    document.getElementById('drink-cabinet').addEventListener('click', () => { AudioManager.playSFX('click'); openDrinkModal(); });
+    document.getElementById('btn-drink-done').addEventListener('click', () => { AudioManager.playSFX('click'); closeDrinkModal(); });
     document.getElementById('drink-modal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('drink-modal')) closeDrinkModal(false);
     });
@@ -41,11 +46,34 @@ const Game = (() => {
     // Language toggle
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        AudioManager.playSFX('click');
         I18N.setLang(btn.dataset.lang);
         updateLangToggle();
         applyTranslations();
         refreshGameText();
       });
+    });
+
+    document.getElementById('btn-restart-game').addEventListener('click', () => {
+      if (state !== 'playing') return;
+      AudioManager.playSFX('click');
+      if (paused) { timer.pause(); AudioManager.pauseBGM(); }
+      else { timer.pause(); AudioManager.pauseBGM(); }
+      document.getElementById('restart-overlay').style.display = 'flex';
+    });
+
+    document.getElementById('btn-restart-confirm').addEventListener('click', () => {
+      AudioManager.playSFX('click');
+      document.getElementById('restart-overlay').style.display = 'none';
+      document.getElementById('pause-overlay').style.display = 'none';
+      paused = false;
+      startGame();
+    });
+
+    document.getElementById('btn-restart-cancel').addEventListener('click', () => {
+      AudioManager.playSFX('click');
+      document.getElementById('restart-overlay').style.display = 'none';
+      if (!paused) { timer.resume(); AudioManager.resumeBGM(); }
     });
 
     updateLangToggle();
@@ -117,13 +145,15 @@ const Game = (() => {
     const pool = RECIPES.slice();
     currentRecipe = pool[Math.floor(Math.random() * pool.length)];
 
+    const customers = ['lady1', 'lady2', 'lady3', 'man1', 'man2', 'man3'];
+    const randomCustomer = customers[Math.floor(Math.random() * customers.length)];
     const customerImg = document.getElementById('customer-img');
     customerImg.classList.remove('entering');
     void customerImg.offsetWidth;
-    customerImg.src = 'assets/images/customers/' + currentRecipe.customer + '.png';
+    customerImg.src = 'assets/images/customers/' + randomCustomer + '.png';
     customerImg.classList.add('entering');
 
-    currentFood  = getRandomFood();
+    currentFood  = { file: currentRecipe.food, name: currentRecipe.name, nameEn: currentRecipe.nameEn };
     currentDrink = getRandomDrink();
     selectedDrink = null;
     renderOrderBubble();
@@ -137,6 +167,14 @@ const Game = (() => {
     bowl.classList.remove('entering');
     void bowl.offsetWidth;
     bowl.classList.add('entering');
+
+    const board = document.querySelector('.cutting-board');
+    if (board) { board.classList.remove('entering'); void board.offsetWidth; board.classList.add('entering'); }
+
+    const cabinet = document.getElementById('drink-cabinet');
+    cabinet.classList.remove('entering');
+    void cabinet.offsetWidth;
+    cabinet.classList.add('entering');
 
     currentPantryIngredients = buildPantry(currentRecipe);
     renderPantry(currentPantryIngredients);
@@ -249,25 +287,35 @@ const Game = (() => {
   function renderPantry(ingredients) {
     const grid = document.getElementById('ingredients-grid');
     grid.innerHTML = '';
-    for (const ing of ingredients) {
+    ingredients.forEach((ing, index) => {
       const card = document.createElement('div');
       card.className = 'ingredient-card' + (placedIngredients.has(ing.id) ? ' in-bowl' : '');
       card.draggable = true;
       card.dataset.ingredientId = ing.id;
+      card.style.animationDelay = (index * 0.04) + 's';
       card.innerHTML =
         '<img src="' + ingredientPath(ing.file) + '" alt="' + ingName(ing) + '">' +
         '<span>' + ingName(ing) + '</span>' +
         (placedIngredients.has(ing.id) ? '<div class="in-bowl-badge">✓</div>' : '');
       grid.appendChild(card);
-    }
+    });
   }
 
   function renderBowl() {
     const bowl = document.getElementById('bowl-ingredients');
     const hint = document.getElementById('bowl-hint');
+    const counter = document.getElementById('bowl-counter');
     bowl.innerHTML = '';
 
-    if (placedIngredients.size === 0) {
+    const total = currentRecipe ? currentRecipe.ingredients.length : 0;
+    const placed = placedIngredients.size;
+
+    if (counter) {
+      counter.textContent = placed + ' / ' + total;
+      counter.classList.toggle('full', placed >= total && total > 0);
+    }
+
+    if (placed === 0) {
       hint.style.display = '';
       return;
     }
@@ -279,9 +327,9 @@ const Game = (() => {
       const item = document.createElement('div');
       item.className = 'bowl-item';
       item.dataset.id = id;
+      item.draggable = true;
       item.innerHTML =
         '<img src="' + ingredientPath(ing.file) + '" alt="' + ingName(ing) + '">' +
-        '<span>' + ingName(ing) + '</span>' +
         '<button class="remove-btn" aria-label="Remove">×</button>';
       bowl.appendChild(item);
     }
@@ -296,6 +344,7 @@ const Game = (() => {
 
   function addIngredient(id) {
     if (state !== 'playing' || paused || placedIngredients.has(id)) return;
+    if (placedIngredients.size >= currentRecipe.ingredients.length) return;
     placedIngredients.add(id);
     renderBowl();
     AudioManager.playSFX('drop');
@@ -313,6 +362,7 @@ const Game = (() => {
 
   function removeIngredient(id) {
     if (state !== 'playing') return;
+    AudioManager.playSFX('click');
     placedIngredients.delete(id);
     renderBowl();
     const card = document.querySelector('.ingredient-card[data-ingredient-id="' + id + '"]');
@@ -331,7 +381,7 @@ const Game = (() => {
     AudioManager.playSFX(reason === 'timeout' ? 'timeout' : 'success');
 
     const timeRemaining = timer ? timer.getRemaining() : 0;
-    const result = calculateScore(currentRecipe, [...placedIngredients], timeRemaining);
+    const result = calculateScore(currentRecipe, [...placedIngredients], timeRemaining, selectedDrink, currentDrink);
     showScore(result);
   }
 
@@ -341,14 +391,16 @@ const Game = (() => {
 
     animateNumber('score-number', result.total, 800);
 
-    document.getElementById('score-accuracy').textContent    = result.correctness + '/50';
-    document.getElementById('score-completeness').textContent = result.completeness + '/30';
-    document.getElementById('score-speed').textContent       = result.speed + '/20';
+    document.getElementById('score-accuracy').textContent     = result.correctness + '/40';
+    document.getElementById('score-completeness').textContent = result.completeness + '/25';
+    document.getElementById('score-speed').textContent        = result.speed + '/15';
+    document.getElementById('score-drink').textContent        = result.drink + '/20';
 
     setTimeout(() => {
-      setBar('score-bar-accuracy',     result.correctness / 50);
-      setBar('score-bar-completeness', result.completeness / 30);
-      setBar('score-bar-speed',        result.speed / 20);
+      setBar('score-bar-accuracy',     result.correctness / 40);
+      setBar('score-bar-completeness', result.completeness / 25);
+      setBar('score-bar-speed',        result.speed / 15);
+      setBar('score-bar-drink',        result.drink / 20);
     }, 150);
 
     renderReveal(result);
@@ -428,6 +480,7 @@ const Game = (() => {
         '<img src="assets/images/drinks/' + encodeURIComponent(drink.file) + '" alt="' + orderItemName(drink) + '">' +
         '<span>' + orderItemName(drink) + '</span>';
       tile.addEventListener('click', () => {
+        AudioManager.playSFX('drop');
         selectedDrink = drink;
         grid.querySelectorAll('.drink-tile').forEach(t => t.classList.remove('selected'));
         tile.classList.add('selected');
@@ -457,6 +510,7 @@ const Game = (() => {
 
   function togglePause() {
     if (state !== 'playing') return;
+    AudioManager.playSFX('click');
     paused = !paused;
     const overlay = document.getElementById('pause-overlay');
     if (paused) {

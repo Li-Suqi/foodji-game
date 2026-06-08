@@ -4,6 +4,7 @@ const AudioManager = (() => {
     drop:    'assets/audio/sfx/drop_master_of_dreams_pop_08_559.mp3',
     success: 'assets/audio/sfx/success_master_of_dreams_christmas_bell_tree_3_without_windchimes_282.mp3',
     timeout: 'assets/audio/sfx/timeout_master_of_dreams_christmas_bell_tree_3_without_windchimes_282.mp3',
+    click:   'assets/audio/sfx/click_master_of_dreams_tongue_click_7_824.mp3',
   };
 
   let bgm = null;

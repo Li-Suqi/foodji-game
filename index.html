@@ -71,13 +71,6 @@
       <line x1="0" y1="556" x2="900" y2="556" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
       <line x1="0" y1="602" x2="900" y2="602" stroke="#6a3c0a" stroke-opacity="0.18" stroke-width="1.5"/>
 
-      <!-- Cutting board (right of bowl) -->
-      <rect x="600" y="344" width="144" height="104" rx="10" fill="#a86830"/>
-      <rect x="606" y="350" width="132" height="92"  rx="8"  fill="#c08040"/>
-      <rect x="716" y="378" width="52"  height="18"  rx="9"  fill="#a86830"/>
-
-      <!-- Bowl shadow on counter (matches oval plate: cx=304+136, cy=340+180) -->
-      <ellipse cx="440" cy="518" rx="132" ry="10" fill="rgba(0,0,0,0.22)"/>
 
 
       <!-- Pantry shelf divider -->
@@ -108,11 +101,25 @@
       <!-- Mute button -->
       <button id="btn-mute" class="btn-mute" title="Ton ein/ausschalten">🔊</button>
 
+      <!-- In-game restart button -->
+      <button id="btn-restart-game" class="btn-restart-game" title="Neu starten">↺</button>
+
+      <!-- Restart confirm overlay -->
+      <div id="restart-overlay" class="pause-overlay" style="display:none">
+        <div class="pause-card">
+          <p class="pause-title" data-i18n="restartConfirmTitle">Neu starten?</p>
+          <p class="restart-confirm-sub" data-i18n="restartConfirmSub">Das aktuelle Spiel geht verloren.</p>
+          <button id="btn-restart-confirm" class="btn-primary" data-i18n="restartConfirmYes">↺ Ja, neu starten</button>
+          <button id="btn-restart-cancel" class="btn-secondary" data-i18n="restartConfirmNo">Abbrechen</button>
+        </div>
+      </div>
+
       <!-- Pause overlay (shown when paused) -->
       <div id="pause-overlay" class="pause-overlay" style="display:none">
         <div class="pause-card">
           <p class="pause-title" data-i18n="pausedTitle">Pausiert</p>
           <button id="btn-resume" class="btn-primary" data-i18n="resumeBtn">▶ Weiter</button>
+          <button id="btn-restart" class="btn-secondary" data-i18n="restartBtn">↺ Neu starten</button>
         </div>
       </div>
 
@@ -148,8 +155,12 @@
         <div id="order-items" class="order-items"></div>
       </div>
 
+      <!-- Cutting board -->
+      <img src="assets/images/layout/board.png" alt="" class="cutting-board">
+
       <!-- Bowl (drop zone on counter) -->
       <div class="bowl-drop-zone" id="bowl-drop-zone">
+        <img src="assets/images/layout/plate.png" class="bowl-plate-bg" alt="">
         <div class="bowl-hint" id="bowl-hint">
           <span class="bowl-hint-icon">🥗</span>
           <span data-i18n="bowlHint">Zutaten ablegen</span>
@@ -157,6 +168,7 @@
         </div>
         <div class="bowl-ingredients" id="bowl-ingredients"></div>
       </div>
+      <div class="bowl-counter" id="bowl-counter"></div>
 
       <!-- Submit button (centered, above pantry) -->
       <button id="btn-submit" class="btn-submit" data-i18n="submitBtn">Gericht fertig! ✓</button>
@@ -209,21 +221,28 @@
             <div class="score-bar-container">
               <div id="score-bar-accuracy" class="score-bar"></div>
             </div>
-            <span id="score-accuracy">0/50</span>
+            <span id="score-accuracy">0/40</span>
           </div>
           <div class="score-row">
             <span class="score-label" data-i18n="completeness">Vollständigkeit</span>
             <div class="score-bar-container">
               <div id="score-bar-completeness" class="score-bar"></div>
             </div>
-            <span id="score-completeness">0/30</span>
+            <span id="score-completeness">0/25</span>
           </div>
           <div class="score-row">
             <span class="score-label" data-i18n="speedBonus">Speed Bonus</span>
             <div class="score-bar-container">
               <div id="score-bar-speed" class="score-bar"></div>
             </div>
-            <span id="score-speed">0/20</span>
+            <span id="score-speed">0/15</span>
+          </div>
+          <div class="score-row">
+            <span class="score-label" data-i18n="drinkBonus">Richtiges Getränk</span>
+            <div class="score-bar-container">
+              <div id="score-bar-drink" class="score-bar"></div>
+            </div>
+            <span id="score-drink">0/20</span>
           </div>
         </div>
 
